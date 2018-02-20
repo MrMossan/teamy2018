@@ -20,6 +20,18 @@ class TestParser(unittest.TestCase):
     def test_endpoints(self):
         self.assertEqual(1000, self.data.endpoints[0].Ld)
         self.assertEqual(3, len(self.data.endpoints[0].caches))
-        self.assertEqual(1, self.data.endpoints[0].caches[2].c)
-        self.assertEqual(200, self.data.endpoints[0].caches[1].Lc)
+        self.assertEqual(100, self.data.endpoints[0].caches[0])
+        self.assertEqual(300, self.data.endpoints[0].caches[1])
 
+
+class TestSolver(unittest.TestCase):
+
+    def test_solve(self):
+        data = caching.read_file("example.in")
+        caching.solve(data)
+
+
+    def test_solve(self):
+        data = caching.read_file("me_at_the_zoo.in")
+        print "PARSING DONE"
+        caching.solve(data)
