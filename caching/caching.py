@@ -1,39 +1,34 @@
 from collections import namedtuple
 
-Collection = namedtuple("Collection", ["value", "locations", "ranges"])
-
+Simulation = namedtuple("Simulation", ["V", "E", "R", "C", "X", "video_sizes", "endpoints", "requests"])
+Endpoint = namedtuple("Endpoint", ["Ld", "caches"])
+Cache = namedtuple("Cache", ["c" ,"Lc"])
+Request = namedtuple("Request", ["Rv", "Re", "Rn"])
 
 def read_file(filename):
     f = open(filename)
 
     lines = f.readlines()
-    T = int(lines[0])
-    S = int(lines[1])
 
-    satellites = []
+    V, E, R, C, X = (int(i) for i in lines[0].split(" "))
+
+    video_sizes = [int(i) for i in lines[1].split(" ")]
+
+    endpoints = []
     line = 2
-    for i in range(S):
-        ps, ls, v, w, d = (int(i) for i in lines[line].split(" "))
-        line = line + 1
-        satellites.append((ps, ls, v, w, d))
+    for i in range(E):
+        Ld, caches_len = (int(i) for i in lines[line].split(" "))
+        line += 1
+        caches = []
+        for j in range(caches_len):
+            c, Lc = (int(i) for i in lines[line].split(" "))
+            caches.append(Cache(c,Lc))
+            line += 1
+        endpoints.append(Endpoint(Ld, caches))
+    requests = []
+    for i in range(R):
+        Rv, Re, Rn = (int(i) for i in lines[line].split(" "))
+        line += 1
+        requests.append(Request(Rv, Re, Rn))
 
-    C = int(lines[S + 2])
-    line = S + 3
-
-    collections = []
-    for l in range(C):
-        V, L, R = (int(i) for i in lines[line].split(" "))
-        c = Collection(V, [], [])
-        line = line + 1
-        for i in range(L):
-            pi, li = (int(i) for i in lines[line + i].split(" "))
-            c.locations.append((pi, li))
-        line = line + L
-
-        for i in range(R):
-            ts, te = (int(i) for i in lines[line].split(" "))
-            line = line + 1
-            c.ranges.append((ts, te))
-        collections.append(c)
-
-    return T, satellites, collections
+    return Simulation(V,E,R,C,X, video_sizes, endpoints,requests)
