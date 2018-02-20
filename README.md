@@ -1,2 +1,2 @@
 # teamy2018
-# nik ta mere
+# nik ta mere!
