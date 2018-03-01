@@ -47,7 +47,10 @@ def solve(simul, output_file):
 
     cars_position = dict((car, Position(0,0)) for car in range(simul.F))
 
-    max_req_distance = max(r.len for r in chrono_reqs)
+    max_distance = sum(r.len for r in chrono_reqs) / float(simul.N) * 3
+
+    print "MAX_SCORE: " + str(sum(r.len + simul.B for r in chrono_reqs))
+
 
     for t in range(simul.T):
 
@@ -58,13 +61,10 @@ def solve(simul, output_file):
 
             if availability_time <= t:
 
-                reqs_for_car = [_r for _r in chrono_reqs if _r.f >= _r.len + dist_req_end_to_other(cars_position[car], _r) + t]
+                reqs_for_car = [_r for _r in chrono_reqs if (_r.f >= _r.len + dist_req_end_to_other(cars_position[car], _r) + t) and (car > 280 or _r.len < max_distance)]
 
                 if reqs_for_car:
-
-                    closest_requests = sorted(reqs_for_car, key=lambda _r: max(dist_req_end_to_other(cars_position[car], _r), _r.s - t))
-
-                    best_request = next(_r for _r in closest_requests if dist_req_end_to_other(cars_position[car], _r) <= _r.s )
+                    best_request = min(reqs_for_car, key=lambda _r: max(dist_req_end_to_other(cars_position[car], _r), _r.s - t))
 
                     assign_request(car, best_request, cars_availability, cars_position, assigned_requests, t)
 
