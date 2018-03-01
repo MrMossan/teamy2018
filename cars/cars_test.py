@@ -28,25 +28,25 @@ class TestSolver(unittest.TestCase):
     def test_solve(self):
         data = cars.read_file("a_example.in")
         print "EXAMPLE"
-        cars.solve(data)
+        cars.solve(data, "a_example.out")
 
 
     def test_solve_zoo(self):
         data = cars.read_file("b_should_be_easy.in")
         print "SHOULD BE EASY"
-        cars.solve(data)
+        cars.solve(data, "b_should_be_easy.out")
 
     def test_solve_trending(self):
         data = cars.read_file("c_no_hurry.in")
         print "NO HURRY"
-        cars.solve(data)
+        cars.solve(data, "c_no_hurry.out")
 
     def test_solve_spreading(self):
         data = cars.read_file("d_metropolis.in")
         print "PARSING DONE"
-        cars.solve(data)
+        cars.solve(data, "d_metropolis.out")
 
     def test_solve_kittens(self):
         data = cars.read_file("e_high_bonus.in")
         print "HIGH BONUS"
-        cars.solve(data)
+        cars.solve(data, "e_high_bonus.out")

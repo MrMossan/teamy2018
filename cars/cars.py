@@ -35,7 +35,7 @@ def assign_request(car, request, cars_availability, cars_position, assigned_requ
     cars_position[car] = request
 
 
-def solve(simul):
+def solve(simul, output_file):
 
     assigned_requests = dict((car, []) for car in range(simul.F))
 
@@ -46,6 +46,9 @@ def solve(simul):
     cars_position = dict((car, Position(0,0)) for car in range(simul.F))
 
     for t in range(simul.T):
+
+        if not t % 10:
+            print t
 
         chrono_reqs = [r for r in chrono_reqs if r.f - request_dist(r) >= t]
 
@@ -63,8 +66,9 @@ def solve(simul):
 
                     chrono_reqs = [r for r in chrono_reqs if r.id != best_request.id]
 
-    for car, requests in assigned_requests.items():
-        print str(len(requests)) + " "  + " ".join(str(r) for r in requests)
+    with open(output_file, "w") as f:
+        for car, requests in assigned_requests.items():
+            f.write(str(len(requests)) + " "  + " ".join(str(r) for r in requests))
 
 
 
