@@ -31,7 +31,22 @@ class TestSolver(unittest.TestCase):
         caching.solve(data)
 
 
-    def test_solve(self):
+    def test_solve_zoo(self):
         data = caching.read_file("me_at_the_zoo.in")
+        print "PARSING DONE"
+        caching.solve(data)
+
+    def test_solve_trending(self):
+        data = caching.read_file("trending_today.in")
+        print "PARSING DONE"
+        caching.solve(data)
+
+    def test_solve_spreading(self):
+        data = caching.read_file("videos_worth_spreading.in")
+        print "PARSING DONE"
+        caching.solve(data)
+
+    def test_solve_kittens(self):
+        data = caching.read_file("kittens.in.txt")
         print "PARSING DONE"
         caching.solve(data)

@@ -43,22 +43,45 @@ def solve(simul):
 
     print "COMPUTED VID SCORE PER EP"
 
-    def compute_score(_c, _v):
-        score = 0.
-        for ie, _e in enumerate(simul.endpoints):
+
+    scores_per_endpoint = []
+    for ie in range(simul.E):
+        def compute_score(_c, _v, _ie):
+            score = 0.
+            _e = simul.endpoints[_ie]
             if _c in _e.caches:
                 Lc = _e.caches[_c]
-                endpoint_score = vid_score_per_ep[ie]
+                endpoint_score = vid_score_per_ep[_ie]
                 score += (_e.Ld - Lc) * endpoint_score.get(_v,0.)
-        return score
+            return score
 
-    score_per_vid_and_cache = [
-        (c,v,compute_score(c,v)) for c in range(simul.C)
-                    for v in range(simul.V)
-    ]
+        #print len(vid_score_per_ep[0].keys())
+        #print len(vid_score_per_ep[0].keys())
+        #print len(simul.endpoints[0].caches.keys())
 
-    print "FIRST SCORE LIST"
+        scores_per_endpoint += [
+            (ie, c,v,compute_score(c,v, ie)) for v in vid_score_per_ep[ie].keys() for c in simul.endpoints[ie].caches.keys()
+        ]
+        #print "FIRST SCORE LIST"
 
-    score_per_vid_and_cache = sorted(score_per_vid_and_cache, key=lambda x:x[2])
 
-    print score_per_vid_and_cache[-1]
+        if ie % 10 == 0:
+            print ie
+
+    scores_per_endpoint = sorted(scores_per_endpoint, key=lambda x: -x[3])
+
+    caches_spaces = dict((i,simul.X) for i in range(simul.C))
+    cache_vids = dict((i,[]) for i in range(simul.C))
+    endpoints_vids = dict((i,[]) for i in range(simul.E))
+
+    for ie,c,v,score in scores_per_endpoint:
+        vid_size = simul.video_sizes[v]
+        videos_in_cache = cache_vids[c]
+        if caches_spaces[c] >= vid_size and v not in videos_in_cache and v not in endpoints_vids[ie]:
+            videos_in_cache.append(v)
+            caches_spaces[c] -= vid_size
+            endpoints_vids[ie].append(v)
+
+    print cache_vids[0]
+    print cache_vids[1]
+    print cache_vids[simul.C - 1]
