@@ -50,3 +50,6 @@ class TestSolver(unittest.TestCase):
         data = cars.read_file("e_high_bonus.in")
         print "HIGH BONUS"
         cars.solve(data, "e_high_bonus.out")
+
+if __name__ == "__main__":
+    TestSolver().test_solve_trending()
