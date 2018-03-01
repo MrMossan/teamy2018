@@ -62,7 +62,10 @@ def solve(simul, output_file):
 
                 if reqs_for_car:
 
-                    best_request = min(reqs_for_car[:50], key=lambda _r: max(dist_req_end_to_other(cars_position[car], _r), _r.s - t))
+
+                    closest_requests = sorted(reqs_for_car, key=lambda _r: max(dist_req_end_to_other(cars_position[car], _r), _r.s - t))[:50]
+
+                    best_request = max(closest_requests, key=lambda _r: (_r.len + simul.B if dist_req_end_to_other(cars_position[car], _r) <= _r.s - t else 0)/float(_r.len))
 
                     assign_request(car, best_request, cars_availability, cars_position, assigned_requests, t)
 
